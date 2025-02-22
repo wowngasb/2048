@@ -25,10 +25,14 @@ GameManager.prototype.restart = function () {
 
 
 GameManager.prototype.tryBack = function(){
-    console.log(`try back list: ${this.lastList.length}`);
+    // console.log(`try back list: ${this.lastList.length}`);
     var tmp = this.lastList.pop();
     tmp && this.recover(tmp);
-      // Update the actuator
+    
+    tmp && this.actuator.continueGame();
+    // Clear the game won/lost message
+    
+    // Update the actuator
     tmp && this.actuate();
   }
 
@@ -70,7 +74,8 @@ GameManager.prototype.setup = function () {
     // Add the initial tiles
     this.addStartTiles();
   }
-
+  
+  this.lastList = [];
   // Update the actuator
   this.actuate();
 };
@@ -279,8 +284,8 @@ GameManager.prototype.move = function (direction) {
     this.lastDirection = direction;
     
     this.lastList.push(tmpState);
-    if (this.lastList.length > 50) {
-      this.lastList = this.lastList.slice(-50);
+    if (this.lastList.length > 500) {
+      this.lastList = this.lastList.slice(-500);
     }
     var smartAI = new SmartAI(this);
     var op = smartAI.nextMove();
